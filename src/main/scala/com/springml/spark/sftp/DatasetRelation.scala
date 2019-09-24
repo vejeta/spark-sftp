@@ -1,6 +1,8 @@
 package com.springml.spark.sftp
 
-import com.databricks.spark.avro._
+import org.apache.spark.sql
+import org.apache.spark.sql.avro._
+//import com.databricks.spark.sql.avro._
 import org.apache.log4j.Logger
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, Row, SQLContext}
@@ -23,7 +25,7 @@ case class DatasetRelation(
     customSchema: StructType,
     sqlContext: SQLContext) extends BaseRelation with TableScan {
 
-    private val logger = Logger.getLogger(classOf[DatasetRelation])
+    //private val logger = Logger.getLogger(classOf[DatasetRelation])
 
     val df = read()
 
@@ -36,7 +38,8 @@ case class DatasetRelation(
       var df: DataFrame = null
 
       df = fileType match {
-        case "avro" => dataframeReader.avro(fileLocation)
+        case "avro" => //dataframeReader.avro(fileLocation)
+          dataframeReader.format("avro").load(fileLocation)
         case "txt" => dataframeReader.format("text").load(fileLocation)
         case "xml" => dataframeReader.format(constants.xmlClass)
           .option(constants.xmlRowTag, rowTag)

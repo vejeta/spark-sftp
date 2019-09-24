@@ -2,6 +2,8 @@
 
 A library for constructing dataframes by downloading files from SFTP and writing dataframe to a SFTP server
 
+**This is a fork of https://github.com/springml/spark-sftp to update the components to use Scala 2.12 and Spark 2.4**
+
 ## Requirements
 
 This library requires Spark 2.x.
@@ -12,6 +14,7 @@ For Spark 1.x support, please check [spark1.x](https://github.com/springml/spark
 You can link against this library in your program at the following ways:
 
 ### Maven Dependency
+The original library:
 ```
 <dependency>
 	<groupId>com.springml</groupId>
@@ -22,8 +25,14 @@ You can link against this library in your program at the following ways:
 ```
 
 ### SBT Dependency
-```
+The original library:
+``
 libraryDependencies += "com.springml" % "spark-sftp_2.11" % "1.1.3"
+``` 
+
+If you do a sbt publishLocal of this fork, then you can use it in your project with:
+``` 
+libraryDependencies += "org.fortysevendeg" %% "spark-sftp" % "1.1.6-SNAPSHOT",
 ```
 
 
