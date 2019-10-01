@@ -1,48 +1,44 @@
-name := "spark-sftp"
+val sparkVersion = "2.4.4"
+val LogbackVersion        = "1.2.3"
+val Log4catsVersion       = "0.4.0-M2"
 
-organization := "com.springml"
+lazy val root = (project in file(".")).
+  settings(
+    inThisBuild(List(
+      organization := "org.fortysevendeg",
+      scalaVersion := "2.12.8"
+    )),
+    name := "spark-sftp",
+    version := "1.1.6-SNAPSHOT",
 
-scalaVersion := "2.11.8"
+  // Dependent libraries
+  libraryDependencies ++= Seq(
+    "org.apache.spark"  %% "spark-core"      % sparkVersion,
+    "org.apache.spark" %% "spark-sql" % sparkVersion,
+    "org.apache.spark" %% "spark-avro" % sparkVersion,
+    "com.springml" % "sftp.client" % "1.0.3",
+    "org.mockito" % "mockito-core" % "3.0.0",
+    "com.databricks" % "spark-xml_2.12" % "0.6.0",
+    "ch.qos.logback"  %  "logback-classic"     % LogbackVersion,
+    "io.chrisdavenport" %% "log4cats-core"     % Log4catsVersion,
+    "io.chrisdavenport" %% "log4cats-slf4j"     % Log4catsVersion
+  ),
+   resolvers += "Spark Package Main Repo" at "https://dl.bintray.com/spark-packages/maven",
 
-sparkVersion := "2.3.0"
+    // Test dependencies
+   libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.8" % "test",
+   libraryDependencies += "org.apache.avro" % "avro-mapred" % "1.9.1" % "test" exclude("org.mortbay.jetty", "servlet-api"),
+   libraryDependencies +=  "org.apache.spark" %% "spark-hive" % sparkVersion % "test",
 
-spName := "springml/spark-sftp"
+   credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
 
-version := "1.1.4"
-
-// Dependent libraries
-libraryDependencies ++= Seq(
-  "com.springml" % "sftp.client" % "1.0.3",
-  "org.mockito" % "mockito-core" % "2.0.31-beta",
-  "com.databricks" % "spark-xml_2.11" % "0.4.1"
-)
-
-// used spark components
-sparkComponents += "sql"
-
-// Repositories
-resolvers += "Spark Package Main Repo" at "https://dl.bintray.com/spark-packages/maven"
-
-// Spark packages
-spDependencies += "com.databricks/spark-avro_2.11:3.2.0"
-
-// Test dependencies
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.1" % "test"
-libraryDependencies += "org.apache.avro" % "avro-mapred" % "1.7.7" % "test" exclude("org.mortbay.jetty", "servlet-api")
-libraryDependencies +=  "org.apache.spark" %% "spark-hive" % sparkVersion.value % "test"
-
-spIgnoreProvided := true
-// licenses := Seq("Apache-2.0" -> url("http://opensource.org/licenses/Apache-2.0"))
-
-credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
-
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (version.value.endsWith("SNAPSHOT"))
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-}
+   publishTo := {
+     val nexus = "https://oss.sonatype.org/"
+     if (version.value.endsWith("SNAPSHOT"))
+       Some("snapshots" at nexus + "content/repositories/snapshots")
+     else
+       Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+    },
 
 pomExtra := (
   <url>https://github.com/springml/spark-sftp</url>
@@ -65,3 +61,4 @@ pomExtra := (
         <url>http://www.springml.com</url>
       </developer>
     </developers>)
+  )
